@@ -1,11 +1,19 @@
 package WebService::Docker::Info;
 
+=head1 NAME
+
+WebService::Docker::Info - IP networking related info from Docker containers
+=cut
+
 use warnings;
 use strict;
 use LWP::UserAgent;
 use URI;
 use JSON::XS;
-use WebService::Docker::Info;
+use WebService::Docker::API;
+use vars qw($VERSION);
+
+$VERSION     = 1.00;
 
 sub new {
   my $class = shift;

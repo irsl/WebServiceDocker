@@ -1,12 +1,18 @@
 package WebService::Docker::API;
 
+=head1 NAME
+
+WebService::Docker::API - Minimalistic implementation of the Docker proto inspired by Net::Docker
+=cut
+
 use warnings;
 use strict;
 use LWP::UserAgent;
 use URI;
 use JSON::XS;
+use vars qw($VERSION);
 
-# Minimalistic implementation of the Docker proto inspired by Net::Docker
+$VERSION     = 1.00;
 
 sub new {
     my $class = shift;
