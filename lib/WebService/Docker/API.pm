@@ -10,6 +10,7 @@ use strict;
 use LWP::UserAgent;
 use URI;
 use JSON::XS;
+
 use vars qw($VERSION);
 
 $VERSION     = 1.00;
@@ -23,10 +24,12 @@ sub new {
         LWP::Protocol::implementor( http => 'LWP::Protocol::http::SocketUnixAlt' );
     }
     my $ua = LWP::UserAgent->new;
+    my $json = JSON::XS->new;
 
     my $obj = {
       _docker_socket => $docker_socket,
       _ua => $ua,
+      _json => $json,
     };
     bless $obj, $class;
 
@@ -43,36 +46,44 @@ sub _uri {
 sub _byRes {
   my $self = shift;
   my $res = shift;
-  my $body = shift || $res->decoded_content;
+  my $body = shift;
 
-    if (($res->content_type eq 'application/json') && ($body)) {
-        return decode_json($body);
+  my $json = $self->{'_json'};
+
+    if (($res->content_type eq 'application/json') && ($body) && ($json)) {
+        return $json->incr_parse($body);
     }
-
-  return $body;
-
 }
 
 sub _body_callback_wrapper {
      my ($self, $data, $response, $protocol) = @_;
 
-  $self->{'_body_callback'}->($self->_byRes($response, $data));
-
+  my $event = $self->_byRes($response, $data);
+  while ( ($event) ) {
+    $self->{'_body_callback'}->($event);
+    $event = $self->_byRes($response);
+  }
 }
 
 sub get {
   my $self = shift;
   my $uri = shift;
-
-  my $cb  = sub { $self->_body_callback_wrapper(@_);  };
+  my $callback = shift;
 
   my $urio = $self->_uri($uri);
-  my $res = $self->{'_body_callback'} ? $self->{'_ua'}->get($urio, ':content_cb' => $cb) : $self->{'_ua'}->get($urio);
+  $self->{'_json'}->incr_reset();
+  my $res;
+  if ( ($callback) ) {
+    $self->set_body_callback($callback);
+    my $cb  = sub { $self->_body_callback_wrapper(@_);  };
+    $res = $self->{'_ua'}->get($urio, ':content_cb' => $cb);
+  } else {
+    $res = $self->{'_ua'}->get($urio);
+  }
 
   die "Docker request was unsuccessful:\n".$res->as_string if(!$res->is_success);
 
-  return $self->_byRes($res);
-
+  return $self->_byRes($res, $res->decoded_content);
 }
 
 sub post {
@@ -117,8 +128,7 @@ sub set_headers_callback {
 
 sub events {
   my ($self, $callback) = @_;
-  $self->set_body_callback($callback);
-  return $self->get('/events');
+  return $self->get('/events',$callback);
 }
 
 1;
