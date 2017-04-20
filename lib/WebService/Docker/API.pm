@@ -111,9 +111,16 @@ sub containers {
   my $self = shift;
   return $self->get("/containers/json");
 }
+
 sub networks {
   my $self = shift;
   return $self->get("/networks");
+}
+
+sub networks_info {
+  my $self = shift;
+  my $network = shift;
+  return $self->get("/networks/$network");
 }
 
 sub set_body_callback {
