@@ -117,7 +117,7 @@ sub networks {
   return $self->get("/networks");
 }
 
-sub networks_info {
+sub network_info {
   my $self = shift;
   my $network = shift;
   return $self->get("/networks/$network");

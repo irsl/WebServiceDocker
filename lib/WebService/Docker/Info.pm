@@ -46,7 +46,7 @@ sub new {
   }
   for my $net_summary (@$networks) {
      next if($net_summary->{'Driver'} ne "bridge");
-     my $net = $api->networks_info($net_summary->{'Name'});
+     my $net = $api->network_info($net_summary->{'Name'});
 
      $net->{'IdShort'} = substr($net->{'Id'}, 0, 12);
      $net->{'BridgeName'} = $net->{'Options'}->{"com.docker.network.bridge.name"} ? $net->{'Options'}->{"com.docker.network.bridge.name"} : "br-".$net->{'IdShort'};
