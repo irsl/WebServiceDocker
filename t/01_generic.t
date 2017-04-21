@@ -18,6 +18,10 @@ use WebService::Docker::Info;
      my ($obj, $id) = @_;
      return $docker_defs->{'mocked_container_infos'}->{$id}; 
   });
+  $module->mock('network_info', sub {
+     my ($obj, $id) = @_;
+     return $docker_defs->{'mocked_network_info'}->{$id}; 
+  });
 
   my $docker_info = new WebService::Docker::Info(undef, 1);
 

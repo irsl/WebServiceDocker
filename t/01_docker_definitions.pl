@@ -592,6 +592,131 @@
           },
 
         ],
+  "mocked_network_info" => {
+          "ftp" => 
+          {
+            'Id' => '62f39412f0978d5232a3a6a1055ea052d86b57452165ed09d1d2b3a5f499a596',
+            'Name' => 'ftp',
+            'Options' => {},
+            'Driver' => 'bridge',
+            'Scope' => 'local',
+            'Containers' => {
+                              '8ac824b2b1e17145b8458d4ff76e2c7e1434f9dce3fcc47ebbb3a0d5ea5d5b0b' => {
+                                                                                                      'MacAddress' => '02:42:ac:1e:00:02',
+                                                                                                      'IPv4Address' => '172.30.0.2/16',
+                                                                                                      'Name' => 'proftpd-test',
+                                                                                                      'EndpointID' => 'e3cb82b54845ca74b26f0ba65057ffa1b30e6eb7ff6f7127f866e06188766df1',
+                                                                                                      'IPv6Address' => ''
+                                                                                                    }
+                            },
+            'IPAM' => {
+                        'Config' => [
+                                      {
+                                        'Subnet' => '172.30.0.0/16',
+                                        'Gateway' => '172.30.0.1/16'
+                                      }
+                                    ],
+                        'Options' => undef,
+                        'Driver' => 'default'
+                      }
+          },
+          "db" =>
+          {
+            'Containers' => {
+                              '8ac824b2b1e17145b8458d4ff76e2c7e1434f9dce3fcc47ebbb3a0d5ea5d5b0b' => {
+                                                                                                      'MacAddress' => '02:42:ac:18:00:0b',
+                                                                                                      'IPv4Address' => '172.24.0.11/16',
+                                                                                                      'IPv6Address' => '',
+                                                                                                      'EndpointID' => '6f1d36e818b6ae45fad2908c6a5d3f4a202b4028f72d8cffe7e806ae57ca020d',
+                                                                                                      'Name' => 'proftpd-test'
+                                                                                                    },
+                              'c1ec849ba65e5639e896a1c763f4df677fbb02241ed97187b5fb2b4ab2ef102f' => {
+                                                                                                      'EndpointID' => 'c13867c17fb27af0c4517efa9f334b53ee75c7db34808390f370446ac043e379',
+                                                                                                      'IPv6Address' => '',
+                                                                                                      'Name' => 'mariadb-4',
+                                                                                                      'IPv4Address' => '172.24.0.5/16',
+                                                                                                      'MacAddress' => '02:42:ac:18:00:05'
+                                                                                                    },
+                            },
+            'IPAM' => {
+                        'Driver' => 'default',
+                        'Options' => undef,
+                        'Config' => [
+                                      {
+                                        'Gateway' => '172.24.0.1/16',
+                                        'Subnet' => '172.24.0.0/16'
+                                      }
+                                    ]
+                      },
+            'Scope' => 'local',
+            'Options' => {},
+            'Driver' => 'bridge',
+            'Id' => 'bdc0a1fc82acc0654bdb9ae82feca83e44b8102fdbf66fe10b4f3f6d5f798669',
+            'Name' => 'db'
+          },
+          "host" =>	  
+          {
+            'Id' => '5c47fb464fbb10f0d58f92818caeb31b4674421a46a561814d4f4c56c34c0338',
+            'Name' => 'host',
+            'Options' => {},
+            'Driver' => 'host',
+            'Scope' => 'local',
+            'Containers' => {
+                              '568468ea1b56f6420c06f2e4a8da3e01af3aee91719ce6612030ff9afca82510' => {
+                                                                                                      'MacAddress' => '',
+                                                                                                      'IPv4Address' => '',
+                                                                                                      'IPv6Address' => '',
+                                                                                                      'EndpointID' => '4eab38740a1887badaa7c5770ec58086d7cac4f15fb0fab3d646d264be44290d',
+                                                                                                      'Name' => 'dfwfw-1'
+                                                                                                    },
+                            },
+            'IPAM' => {
+                        'Config' => [],
+                        'Options' => undef,
+                        'Driver' => 'default'
+                      }
+          },
+          "none" =>
+          {
+            'Containers' => {},
+            'IPAM' => {
+                        'Options' => undef,
+                        'Config' => [],
+                        'Driver' => 'default'
+                      },
+            'Scope' => 'local',
+            'Options' => {},
+            'Driver' => 'null',
+            'Id' => '70ac192369757615bed43a834700f7c2d7f27c904d812443313d9c1b0a920d21',
+            'Name' => 'none'
+          },
+          "bridge" =>	  
+          {
+            'Scope' => 'local',
+            'IPAM' => {
+                        'Config' => [
+                                      {
+                                        'Subnet' => '172.17.0.0/16'
+                                      }
+                                    ],
+                        'Options' => undef,
+                        'Driver' => 'default'
+                      },
+            'Containers' => {
+                            },
+            'Name' => 'bridge',
+            'Id' => '7d9fb0dce9a9811a47dff8b832eb925ee4d5a2758eba7784fb8fbf24658a3768',
+            'Driver' => 'bridge',
+            'Options' => {
+                           'com.docker.network.bridge.default_bridge' => 'true',
+                           'com.docker.network.driver.mtu' => '1500',
+                           'com.docker.network.bridge.enable_ip_masquerade' => 'false',
+                           'com.docker.network.bridge.enable_icc' => 'true',
+                           'com.docker.network.bridge.host_binding_ipv4' => '0.0.0.0',
+                           'com.docker.network.bridge.name' => 'docker0'
+                         }
+          }    
+  },
 
   "mocked_containers_response" =>  [
           {
