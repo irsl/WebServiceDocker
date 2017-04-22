@@ -13,13 +13,21 @@ use JSON::XS;
 
 use vars qw($VERSION);
 
-$VERSION     = 1.00;
+$VERSION     = 1.02;
 
 sub new {
     my $class = shift;
-    my $docker_socket = shift || "http:/var/run/docker.sock/";
 
-    if ( $docker_socket !~ m!http://! ) {
+    # The first version of this class expected a single parameter, now we support some more through a hashref:
+    my $docker_options = shift || {};
+    if(ref($docker_options) eq "") {
+       $docker_options = {"docker_socket"=>$docker_options};
+    }
+    $docker_options->{"docker_socket"} ||= "http:/var/run/docker.sock/";
+
+    die "Invalid version syntax" if(($docker_options->{"docker_api_version"})&&($docker_options->{"docker_api_version"} !~ /^\d+\.\d\d$/));
+
+    if ( $docker_options->{'docker_socket'} !~ m!http://! ) {
         require LWP::Protocol::http::SocketUnixAlt;
         LWP::Protocol::implementor( http => 'LWP::Protocol::http::SocketUnixAlt' );
     }
@@ -27,7 +35,7 @@ sub new {
     my $json = JSON::XS->new;
 
     my $obj = {
-      _docker_socket => $docker_socket,
+      _docker_options => $docker_options,
       _ua => $ua,
       _json => $json,
     };
@@ -38,7 +46,15 @@ sub new {
 
 sub _uri {
     my ($self, $uri, %options) = @_;
-    my $re = URI->new($self->{'_docker_socket'} . $uri);
+
+    my $full_url = 
+        $self->{"_docker_options"}->{"docker_socket"} .
+        ($self->{"_docker_options"}->{"docker_api_version"} ? "/v".$self->{"_docker_options"}->{"docker_api_version"} : "") .
+        $uri
+    ;
+    print STDERR "Sending API request to: $full_url\n" if($self->{"_docker_options"}->{"trace"});
+
+    my $re = URI->new($full_url);
     $re->query_form(%options);
     return $re;
 }

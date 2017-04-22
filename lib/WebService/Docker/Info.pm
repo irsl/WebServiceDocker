@@ -13,12 +13,17 @@ use JSON::XS;
 use WebService::Docker::API;
 use vars qw($VERSION);
 
-$VERSION     = 1.00;
+$VERSION     = 1.01;
 
 sub new {
   my $class = shift;
-  my $docker_socket = shift;
+  my $docker_options = shift;
   my $query_extra_info = shift || 0;
+
+  $docker_options = {"docker_socket"=>$docker_options} if(ref($docker_options) eq "");
+
+  # NOTE: this module expects the responses the same way how it worked at API version:
+  $docker_options->{'docker_api_version'} = "1.12";
 
   my $re;
   for my $k ("container_by_ip","container_by_id","container_by_name","container_extra_by_name",
@@ -27,7 +32,7 @@ sub new {
   }
 
 
-  my $api = WebService::Docker::API->new($docker_socket);
+  my $api = WebService::Docker::API->new($docker_options);
   my $networks = $api->networks();
   my $containers = $api->containers();
 
